@@ -20,7 +20,7 @@ interface CartContextData {
   updateProductAmount: ({ productId, amount }: UpdateProductAmount) => void;
 }
 
-const CartContext = createContext<CartContextData>({} as CartContextData);
+export const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
@@ -34,18 +34,20 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     return [];
   }
 
-  //Criando um carrinho que é do tipo product que é um lista de Produtos
+  //Criando um estado(carrinho) que é do tipo product que é um lista de Produtos
   const [cart, setCart] = useState<Product[]>(dedeNsabeReact);
 
 
   const addProduct = async (productId: number) => {
     try { 
+      debugger;
       let myCart = {...cart};
       //busca produto
       const produtoAdicionado = await api.get(`products/${productId}`);
       const idProduto = produtoAdicionado.data.id
 
       const produtoEncontrado = myCart.find(x => x.id === idProduto);
+      console.log(produtoEncontrado);
       const estoque = await api.get(`stock/${produtoEncontrado?.id}`);
       const qntDisponivel = estoque.data.amount;
 
